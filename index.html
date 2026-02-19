@@ -884,12 +884,7 @@ body {
 </footer>
 
 <script>
-/* ══════════════════════════════════════════════════
-   ⚙️  여기에 API Key를 입력하세요
-   발급: console.anthropic.com → API Keys → Create Key
-   ══════════════════════════════════════════════════ */
-const API_KEY = "YOUR_ANTHROPIC_API_KEY_HERE";
-/* ══════════════════════════════════════════════════ */
+const WORKER_URL = "https://divine-star-eb4a.june-27b.workers.dev/";
 
 const selected = new Set();
 let running = false;
@@ -988,8 +983,7 @@ function toggleComp(id) {
 
 /* ── 실행 버튼 활성화 체크 ─────────────────── */
 function checkReady() {
-  const ok = API_KEY !== 'YOUR_ANTHROPIC_API_KEY_HERE'
-    && selected.size > 0
+  const ok = selected.size > 0
     && document.getElementById('f-name').value.trim()
     && document.getElementById('f-country').value.trim()
     && document.getElementById('f-oneliner').value.trim()
@@ -1000,9 +994,7 @@ function checkReady() {
     && !running;
   document.getElementById('runBtn').disabled = !ok;
 
-  if (API_KEY === 'YOUR_ANTHROPIC_API_KEY_HERE') {
-    document.getElementById('runBtn').title = 'API Key가 설정되지 않았습니다.';
-  }
+
 }
 
 /* ── 로그 출력 ─────────────────────────────── */
@@ -1063,13 +1055,10 @@ ${g('f-mobile')}`;
 
 /* ── Claude API 호출 ───────────────────────── */
 async function callClaude(system, user) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await fetch(WORKER_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': API_KEY,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
